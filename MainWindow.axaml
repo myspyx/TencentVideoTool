@@ -1,0 +1,94 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
+        Width="1024" Height="768"
+        x:Class="TencentVideoTool.MainWindow"
+        Title="Tencent Video Tool">
+    <Window.Styles>
+        <Style Selector="Label">
+            <Setter Property="Margin" Value="8, 4, 4, 0" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Margin" Value="8, 0, 0, 0" />
+        </Style>
+        <Style Selector="Border.media-info">
+            <Setter Property="Padding" Value="12, 10, 0, 10" />
+            <Setter Property="Height" Value="42" />
+            <Setter Property="BorderBrush" Value="#333333" />
+            <Setter Property="BorderThickness" Value="0, 0, 0, 1" />
+        </Style>
+        <Style Selector="Border.media-info:pointerover">
+            <Setter Property="Background" Value="#333333" />
+        </Style>
+        <Style Selector="TextBlock.th.lg">
+            <Setter Property="Width" Value="250" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="TextBlock.td.lg">
+            <Setter Property="Width" Value="250" />
+        </Style>
+        <Style Selector="TextBlock.th.sm">
+            <Setter Property="Width" Value="100" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="TextBlock.td.sm">
+            <Setter Property="Width" Value="100" />
+        </Style>
+        <Style Selector="TextBlock.th.xs">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="TextBlock.td.xs">
+            <Setter Property="Width" Value="30" />
+        </Style>
+        <Style Selector="TextBlock.error">
+            <Setter Property="Foreground" Value="#f00000" />
+        </Style>
+        <Style Selector="TextBlock.pass">
+            <Setter Property="Foreground" Value="#4295f5" />
+        </Style>
+        <Style Selector="Button.sm">
+            <Setter Property="Padding" Value="4, 0, 0, 0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Width" Value="100" />
+        </Style>
+    </Window.Styles>
+
+    <DockPanel LastChildFill="True">
+        <StackPanel x:Name="SignInPanel" Margin="0, 12, 0, 0" Orientation="Horizontal" DockPanel.Dock="Top">
+            <Label>Secret id:</Label>
+            <TextBox x:Name="SecretIdTextBox" Width="250" />
+            <Label>Secret key:</Label>
+            <TextBox x:Name="SecretKeyTextBox" Width="250" />
+            <Label>Sub app id:</Label>
+            <TextBox x:Name="SubAppIdTextBox" Width="150" />
+            <Button Click="OnSignInClicked">Sign in</Button>
+        </StackPanel>
+
+        <DockPanel x:Name="MainPanel" IsEnabled="False" LastChildFill="True">
+            <StackPanel Margin="0, 12, 0, 0" Orientation="Horizontal" DockPanel.Dock="Top">
+                <Label>Categories:</Label>
+                <ComboBox x:Name="CategoryComboBox" Width="150" />
+                <Label>Srt folder path:</Label>
+                <TextBox x:Name="SrtPathTextBox" Width="250" />
+                <Button Click="OnLoadClicked">Load</Button>
+                <Button Click="OnAddAllSubtitlesClicked">Add subtitles for all</Button>
+            </StackPanel>
+            <DockPanel LastChildFill="True">
+                <StackPanel Margin="12, 12, 0, 12" Orientation="Horizontal" DockPanel.Dock="Top">
+                    <TextBlock Classes="th xs" Text="#" />
+                    <TextBlock Classes="th lg" Text="Video" />
+                    <TextBlock Classes="th lg" Text="Srt file" />
+                    <TextBlock Classes="th sm" Text="Has subtitle" />
+                    <TextBlock Classes="th sm" Text="Action" />
+                    <TextBlock Classes="th lg" Text="Message" />
+                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="MediaGrid" Orientation="Vertical" />
+                </ScrollViewer>
+            </DockPanel>
+        </DockPanel>
+    </DockPanel>
+</Window>
