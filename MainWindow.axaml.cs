@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using MessageBox.Avalonia;
 using TencentCloud.Vod.V20180717.Models;
 
 namespace TencentVideoTool
@@ -67,44 +68,58 @@ namespace TencentVideoTool
 
         private void OnSignInClicked(object sender, RoutedEventArgs e)
         {
-            _tencentVodService = new TencentVodService(_secretIdTextBox.Text, _secretKeyTextBox.Text, Convert.ToUInt64(_subAppIdTextBox.Text));
-            _classInfos = _tencentVodService.GetAllMediaClassInfos();
-            var avaloniaList = new AvaloniaList<TextBlock>();
-            foreach (var mediaClassInfo in _classInfos)
+            try
             {
-                avaloniaList.Add(new TextBlock() {Text = mediaClassInfo.ClassName});
+                _tencentVodService = new TencentVodService(_secretIdTextBox.Text.Trim(), _secretKeyTextBox.Text.Trim(), Convert.ToUInt64(_subAppIdTextBox.Text.Trim()));
+                _classInfos = _tencentVodService.GetAllMediaClassInfos();
+                var avaloniaList = new AvaloniaList<TextBlock>();
+                foreach (var mediaClassInfo in _classInfos)
+                {
+                    avaloniaList.Add(new TextBlock() {Text = mediaClassInfo.ClassName});
+                }
+
+                _categoryComboBox.Items = avaloniaList;
+
+                _signInPanel.IsEnabled = false;
+                _mainPanel.IsEnabled = true;
             }
-
-            _categoryComboBox.Items = avaloniaList;
-
-            _signInPanel.IsEnabled = false;
-            _mainPanel.IsEnabled = true;
+            catch (Exception ex)
+            {
+                MessageBoxManager.GetMessageBoxStandardWindow("Error", ex.Message).Show();
+            }
         }
 
         private void OnLoadClicked(object sender, RoutedEventArgs e)
         {
-            _currentClassId = _classInfos[_categoryComboBox.SelectedIndex].ClassId;
-
-            _tencentMediaInfos = _tencentVodService.GetMediaInfos(_currentClassId).Select(mediaInfo =>
+            try
             {
-                var tencentMediaInfo = new TencentMediaInfo();
-                // name
-                tencentMediaInfo.MediaName = mediaInfo.BasicInfo.Name;
-                // srt name
-                var srtFileName = Path.Combine(_srtPathTextBox.Text ?? "", Path.ChangeExtension(tencentMediaInfo.MediaName, ".srt"));
-                if (File.Exists(srtFileName))
+                _currentClassId = _classInfos[_categoryComboBox.SelectedIndex].ClassId;
+
+                _tencentMediaInfos = _tencentVodService.GetMediaInfos(_currentClassId).Select(mediaInfo =>
                 {
-                    tencentMediaInfo.SrtFilePath = srtFileName;
-                }
+                    var tencentMediaInfo = new TencentMediaInfo();
+                    // name
+                    tencentMediaInfo.MediaName = mediaInfo.BasicInfo.Name;
+                    // srt name
+                    var srtFileName = Path.Combine(_srtPathTextBox.Text ?? "", Path.ChangeExtension(tencentMediaInfo.MediaName, ".srt"));
+                    if (File.Exists(srtFileName))
+                    {
+                        tencentMediaInfo.SrtFilePath = srtFileName;
+                    }
 
-                // has subtitle
-                tencentMediaInfo.HasSubtitle = mediaInfo.SubtitleInfo?.SubtitleSet?.Any() ?? false;
+                    // has subtitle
+                    tencentMediaInfo.HasSubtitle = mediaInfo.SubtitleInfo?.SubtitleSet?.Any() ?? false;
 
-                tencentMediaInfo.MediaInfo = mediaInfo;
-                return tencentMediaInfo;
-            }).ToList();
-
-            this.RenderVideoGrid();
+                    tencentMediaInfo.MediaInfo = mediaInfo;
+                    return tencentMediaInfo;
+                }).ToList();
+                
+                this.RenderVideoGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBoxManager.GetMessageBoxStandardWindow("Error", ex.Message).Show();
+            }
         }
 
         private void OnAddAllSubtitlesClicked(object sender, RoutedEventArgs e)

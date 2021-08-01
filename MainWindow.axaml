@@ -69,7 +69,7 @@
 
         <DockPanel x:Name="MainPanel" IsEnabled="False" LastChildFill="True">
             <StackPanel Margin="0, 12, 0, 0" Orientation="Horizontal" DockPanel.Dock="Top">
-                <Label>Categories:</Label>
+                <Label>Category:</Label>
                 <ComboBox x:Name="CategoryComboBox" Width="150" />
                 <Label>Srt folder path:</Label>
                 <TextBox x:Name="SrtPathTextBox" Width="250" />
