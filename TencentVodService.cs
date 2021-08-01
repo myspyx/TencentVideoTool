@@ -46,6 +46,7 @@ namespace TencentVideoTool
             req.ClassIds = new long?[] {classId};
             req.SubAppId = _subAppId;
             req.Limit = 5000;
+            req.Categories = new string[] {"Video"};
             var resp = _client.SearchMediaSync(req);
             return resp.MediaInfoSet.ToList();
         }
